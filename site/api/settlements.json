@@ -1,0 +1,12 @@
+{
+  "settlements": [
+    {
+      "name": "0,0",
+      "coordinates": { "x": 0, "z": 0 },
+      "nation": "Anguish",
+      "contact": "zibekabir",
+      "visitors": "welcome",
+      "discord": ""
+    }
+  ]
+}

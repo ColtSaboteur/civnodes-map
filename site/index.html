@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>CivNodes Map</title>
+    <meta name="description" content="Explore the CivNodes Minecraft world map.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://civ-nodes-map.com/">
+    <meta property="og:title" content="CivNodes Map">
+    <meta property="og:description" content="Explore the CivNodes Minecraft world map.">
+    <meta property="og:image" content="https://civ-nodes-map.com/images/og_image.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="CivNodes Map">
+    <meta name="twitter:description" content="Explore the CivNodes Minecraft world map.">
+    <meta name="twitter:image" content="https://civ-nodes-map.com/images/og_image.png">
+    <link rel="icon" href="favicon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
+    <link rel="stylesheet" href="style.css">
+  </head>
+  <body>
+    <main id="app">
+      <aside id="sidebar" aria-label="Map controls">
+        <h1>▣ CIVNODES MAP</h1>
+
+        <div class="section">
+          <label>Server</label>
+          <div class="server-address">play.civnodes.net</div>
+        </div>
+
+        <div class="section">
+          <label>Community links</label>
+          <nav class="link-row" aria-label="Community links">
+            <a href="https://civnodes.com/" target="_blank" rel="noopener noreferrer" class="link-btn">Website</a>
+            <a href="https://discord.gg/civnodes" target="_blank" rel="noopener noreferrer" class="link-btn">Discord</a>
+          </nav>
+        </div>
+
+        <form id="jump-form" class="section">
+          <label>Jump to coordinate</label>
+          <div class="row">
+            <input id="jump-x" class="small-input" name="x" placeholder="X" inputmode="decimal" required>
+            <input id="jump-z" class="small-input" name="z" placeholder="Z" inputmode="decimal" required>
+            <button type="submit">Go</button>
+          </div>
+        </form>
+
+        <div class="section">
+          <label>Claims overlay</label>
+          <div class="row toggle-row">
+            <input id="claims-toggle" type="checkbox">
+            <label for="claims-toggle">Show claims overlay</label>
+          </div>
+          <div class="slider-row">
+            <label for="claims-opacity">Opacity:</label>
+            <input id="claims-opacity" type="range" min="0" max="100" value="70">
+            <output id="claims-opacity-value">70%</output>
+          </div>
+          <p id="claims-status" class="file-status" aria-live="polite">Loading claims image.</p>
+        </div>
+
+        <div class="section">
+          <label>Settlements</label>
+          <div class="row toggle-row">
+            <input id="settlements-toggle" type="checkbox" checked disabled>
+            <label for="settlements-toggle">Show settlements</label>
+          </div>
+          <p id="settlements-status" class="file-status" aria-live="polite">Loading settlements.</p>
+        </div>
+
+        <div class="section">
+          <label>Nodes overlay</label>
+          <div class="file-row">
+            <label for="node-file" class="file-btn">Choose JSON file</label>
+            <input id="node-file" type="file" accept=".json" hidden>
+            <button id="node-help" type="button" class="info-icon" aria-expanded="false" aria-controls="node-info">?</button>
+          </div>
+          <p id="node-status" class="file-status" aria-live="polite">No file loaded.</p>
+          <div id="node-info" class="info-box" hidden>Download <a href="scripts/ingame_node_scraper.js" download>ingame_node_scraper.js</a>, use it in-game with JSMacros, then load its JSON file here.</div>
+          <div class="row toggle-row">
+            <input id="nodes-toggle" type="checkbox" disabled>
+            <label for="nodes-toggle">Show nodes overlay</label>
+          </div>
+          <div class="slider-row">
+            <label for="nodes-opacity">Opacity:</label>
+            <input id="nodes-opacity" type="range" min="0" max="100" value="100" disabled>
+            <output id="nodes-opacity-value">100%</output>
+          </div>
+        </div>
+
+        <div class="section">
+          <label>Snitch overlay</label>
+          <div class="file-row">
+            <label for="snitch-file" class="file-btn">Choose DB file</label>
+            <input id="snitch-file" type="file" accept=".sqlite,.db,.sqlite3,.json" hidden>
+            <button id="snitch-help" type="button" class="info-icon" aria-expanded="false" aria-controls="snitch-info">?</button>
+          </div>
+          <p id="snitch-status" class="file-status" aria-live="polite">No database loaded.</p>
+          <div id="snitch-info" class="info-box" hidden>Download <a href="https://modrinth.com/mod/snitch-mod" target="_blank" rel="noopener noreferrer">SnitchMod</a>, then select the database in <code>minecraft/SnitchMod/play.civnodes.com/</code>.</div>
+          <div class="row toggle-row">
+            <input id="snitches-toggle" type="checkbox" disabled>
+            <label for="snitches-toggle">Show snitch overlay</label>
+          </div>
+          <div class="slider-row">
+            <label for="snitches-opacity">Opacity:</label>
+            <input id="snitches-opacity" type="range" min="0" max="100" value="80" disabled>
+            <output id="snitches-opacity-value">80%</output>
+          </div>
+        </div>
+      </aside>
+      <div id="sidebar-toggle-bar"><button id="sidebar-toggle" type="button" aria-controls="sidebar" aria-expanded="true" aria-label="Hide map controls">‹</button></div>
+      <section class="map-shell" aria-label="Interactive Minecraft world map">
+        <div id="map" tabindex="0"></div>
+        <p id="map-status" class="map-status" aria-live="polite"></p>
+        <p id="map-coordinates" class="map-coordinates">Move over the map to inspect coordinates.</p>
+        <div id="node-legend" class="legend map-legend" aria-label="Node legend" hidden></div>
+      </section>
+    </main>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.8.0/sql-wasm.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>

@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="1.5 1.5 12 12" width="256" height="256" shape-rendering="crispEdges">
+  <!-- same skewed 4x4 tile lattice as the server icon -->
+  <g fill="#5CE5D8">
+    <rect x="5" y="2" width="2" height="2"/>
+    <rect x="9" y="4" width="2" height="2"/>
+    <rect x="6" y="5" width="2" height="2"/>
+    <rect x="3" y="6" width="2" height="2"/>
+    <rect x="10" y="7" width="2" height="2"/>
+    <rect x="7" y="8" width="2" height="2"/>
+    <rect x="4" y="9" width="2" height="2"/>
+    <rect x="8" y="11" width="2" height="2"/>
+  </g>
+  <g fill="#CCCCCC">
+    <rect x="7" y="3" width="2" height="2"/>
+    <rect x="11" y="5" width="2" height="2"/>
+    <rect x="4" y="4" width="2" height="2"/>
+    <rect x="8" y="6" width="2" height="2"/>
+    <rect x="5" y="7" width="2" height="2"/>
+    <rect x="2" y="8" width="2" height="2"/>
+    <rect x="9" y="9" width="2" height="2"/>
+    <rect x="6" y="10" width="2" height="2"/>
+  </g>
+  <!-- map pin -->
+  <polygon fill="#1F2A2A" stroke="#FFFFFF" stroke-width="0.5" stroke-linejoin="miter"
+    points="7,5.5 8,5.5 8,6 8.5,6 8.5,6.5 9,6.5 9,8 8.5,8 8.5,8.5 8,8.5 8,9.5 7,9.5 7,8.5 6.5,8.5 6.5,8 6,8 6,6.5 6.5,6.5 6.5,6 7,6"/>
+  <rect x="7" y="6.5" width="1" height="1" fill="#FFFFFF"/>
+</svg>

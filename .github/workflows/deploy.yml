@@ -1,0 +1,57 @@
+name: Deploy map to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: github-pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Check out website
+        uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+
+      - name: Check out tiles and map bounds
+        uses: actions/checkout@v6
+        with:
+          repository: ColtSaboteur/civnodes-map-tiles
+          ref: main
+          path: site/map-data
+          persist-credentials: false
+
+      - name: Check website size
+        run: |
+          test -s site/map-data/api/config.json
+          test -s site/map-data/tiles/0/0/0.png
+          bytes=$(du --exclude=.git --exclude=.github -sb site | cut -f1)
+          if [ "$bytes" -ge 1000000000 ]; then
+            echo "::error::Website is $bytes bytes; GitHub Pages requires a site smaller than 1 GB."
+            exit 1
+          fi
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload website
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: site
+
+      - name: Deploy website
+        id: deployment
+        uses: actions/deploy-pages@v4
