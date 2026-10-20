@@ -20,12 +20,29 @@
   };
   const sidebar = document.getElementById("sidebar");
   const sidebarToggle = document.getElementById("sidebar-toggle");
-  sidebarToggle.addEventListener("click", () => {
-    const collapsed = sidebar.classList.toggle("collapsed");
-    sidebarToggle.textContent = collapsed ? "›" : "‹";
-    sidebarToggle.setAttribute("aria-expanded", String(!collapsed));
-    sidebarToggle.setAttribute("aria-label", collapsed ? "Show map controls" : "Hide map controls");
+  const sidebarIcon = document.getElementById("sidebar-toggle-icon");
+  const sidebarLabel = document.getElementById("sidebar-toggle-label");
+  const sidebarBackdrop = document.getElementById("sidebar-backdrop");
+  const mapShell = document.querySelector(".map-shell");
+  const mobileLayout = window.matchMedia("(max-width: 760px)");
+  const setSidebarOpen = (open) => {
+    sidebar.classList.toggle("collapsed", !open);
+    sidebar.inert = !open;
+    sidebarToggle.setAttribute("aria-expanded", String(open));
+    sidebarToggle.setAttribute("aria-label", open ? "Hide map controls" : "Show map controls");
+    sidebarIcon.textContent = mobileLayout.matches ? (open ? "×" : "☰") : (open ? "‹" : "›");
+    sidebarLabel.textContent = open ? "Close" : "Menu";
+    sidebarBackdrop.hidden = !mobileLayout.matches || !open;
+    mapShell.inert = mobileLayout.matches && open;
+    if (!open && sidebar.contains(document.activeElement)) sidebarToggle.focus();
+  };
+  sidebarToggle.addEventListener("click", () => setSidebarOpen(sidebar.classList.contains("collapsed")));
+  sidebarBackdrop.addEventListener("click", () => setSidebarOpen(false));
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") setSidebarOpen(false);
   });
+  mobileLayout.addEventListener("change", () => setSidebarOpen(!mobileLayout.matches));
+  setSidebarOpen(!mobileLayout.matches);
   [["node-help", "node-info"], ["snitch-help", "snitch-info"]].forEach(([buttonId, boxId]) => {
     const button = document.getElementById(buttonId);
     const box = document.getElementById(boxId);
@@ -176,6 +193,7 @@
     const world = settings.worldBounds;
     const bounds = L.latLngBounds([world.minZ, world.minX], [world.minZ + world.size, world.minX + world.size]);
     const map = L.map("map", { attributionControl: false, crs: worldCrs(world), keyboard: false, minZoom: settings.minZoom, maxZoom: settings.maxZoom, maxBounds: bounds });
+    new ResizeObserver(() => map.invalidateSize({ pan: false })).observe(map.getContainer());
     L.tileLayer("map-data/tiles/{z}/{x}/{y}.png", {
       minZoom: settings.minZoom, maxZoom: settings.maxZoom, tileSize: settings.tileSize, noWrap: true, bounds
     }).on("tileerror", () => setStatus(mapStatus, "A map tile could not load. Run the updater again and republish site/.", true)).addTo(map);

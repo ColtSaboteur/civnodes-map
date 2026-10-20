@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content">
     <title>CivNodes Map</title>
     <meta name="description" content="Explore the CivNodes Minecraft world map.">
     <meta property="og:type" content="website">
@@ -22,7 +22,14 @@
   </head>
   <body>
     <main id="app">
-      <aside id="sidebar" aria-label="Map controls">
+      <div id="sidebar-toggle-bar">
+        <button id="sidebar-toggle" type="button" aria-controls="sidebar" aria-expanded="false" aria-label="Show map controls">
+          <span id="sidebar-toggle-icon" aria-hidden="true">☰</span>
+          <span id="sidebar-toggle-label">Menu</span>
+        </button>
+      </div>
+      <div id="sidebar-backdrop" aria-hidden="true" hidden></div>
+      <aside id="sidebar" class="collapsed" aria-label="Map controls" inert>
         <h1>▣ CIVNODES MAP</h1>
 
         <div class="section">
@@ -110,7 +117,6 @@
           </div>
         </div>
       </aside>
-      <div id="sidebar-toggle-bar"><button id="sidebar-toggle" type="button" aria-controls="sidebar" aria-expanded="true" aria-label="Hide map controls">‹</button></div>
       <section class="map-shell" aria-label="Interactive Minecraft world map">
         <div id="map" tabindex="0"></div>
         <p id="map-status" class="map-status" aria-live="polite"></p>
