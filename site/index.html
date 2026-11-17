@@ -78,6 +78,15 @@
         </div>
 
         <div class="section">
+          <label>Photospheres</label>
+          <div class="row toggle-row">
+            <input id="photospheres-toggle" type="checkbox" checked disabled>
+            <label for="photospheres-toggle">Show photospheres</label>
+          </div>
+          <p id="photospheres-status" class="file-status" aria-live="polite">Loading photospheres.</p>
+        </div>
+
+        <div class="section">
           <label>Nodes overlay</label>
           <div class="file-row">
             <label for="node-file" class="file-btn">Choose JSON file</label>
@@ -124,6 +133,17 @@
         <div id="node-legend" class="legend map-legend" aria-label="Node legend" hidden></div>
       </section>
     </main>
+    <dialog id="photosphere-dialog" aria-labelledby="photosphere-title" aria-describedby="photosphere-coordinates">
+      <header class="photosphere-header">
+        <div>
+          <h2 id="photosphere-title"></h2>
+          <p id="photosphere-coordinates"></p>
+        </div>
+        <button id="photosphere-close" type="button" autofocus>Close</button>
+      </header>
+      <p id="photosphere-status" class="file-status" role="status"></p>
+      <div id="photosphere-viewer" aria-label="360 degree panorama" tabindex="0"></div>
+    </dialog>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.8.0/sql-wasm.js"></script>
     <script src="app.js"></script>

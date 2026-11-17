@@ -39,7 +39,7 @@
   sidebarToggle.addEventListener("click", () => setSidebarOpen(sidebar.classList.contains("collapsed")));
   sidebarBackdrop.addEventListener("click", () => setSidebarOpen(false));
   document.addEventListener("keydown", (event) => {
-    if (event.key === "Escape") setSidebarOpen(false);
+    if (event.key === "Escape" && !document.getElementById("photosphere-dialog").open) setSidebarOpen(false);
   });
   mobileLayout.addEventListener("change", () => setSidebarOpen(!mobileLayout.matches));
   setSidebarOpen(!mobileLayout.matches);
@@ -175,6 +175,115 @@
     return `<h2>${escapeHtml(name)}</h2><dl>${details}</dl>${discordLink}`;
   };
 
+  const photosphereDialog = document.getElementById("photosphere-dialog");
+  const photosphereStatus = document.getElementById("photosphere-status");
+  let photosphereLibrary;
+  let photosphereViewer;
+  let photosphereTrigger;
+  let photosphereRequest = 0;
+
+  const loadPhotosphereLibrary = () => {
+    if (!photosphereLibrary) {
+      const css = document.createElement("link");
+      css.rel = "stylesheet";
+      css.href = "https://cdn.jsdelivr.net/npm/pannellum@2.5.7/build/pannellum.css";
+      const script = document.createElement("script");
+      script.src = "https://cdn.jsdelivr.net/npm/pannellum@2.5.7/build/pannellum.js";
+      photosphereLibrary = Promise.all([css, script].map((element) => new Promise((resolve, reject) => {
+        element.onload = resolve;
+        element.onerror = () => reject(new Error("The 360° viewer could not load. Close and try again."));
+        document.head.append(element);
+      }))).catch((error) => {
+        css.remove();
+        script.remove();
+        photosphereLibrary = undefined;
+        throw error;
+      });
+    }
+    return photosphereLibrary;
+  };
+
+  document.getElementById("photosphere-close").addEventListener("click", () => photosphereDialog.close());
+  // Pannellum consumes Escape before the browser can dismiss the dialog.
+  photosphereDialog.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") {
+      event.preventDefault();
+      event.stopPropagation();
+      photosphereDialog.close();
+    }
+  }, true);
+  photosphereDialog.addEventListener("cancel", (event) => {
+    event.preventDefault();
+    photosphereDialog.close();
+  });
+  photosphereDialog.addEventListener("close", () => {
+    photosphereRequest++;
+    photosphereViewer?.destroy();
+    photosphereViewer = undefined;
+    document.getElementById("photosphere-viewer").replaceChildren();
+    photosphereTrigger?.focus({ preventScroll: true });
+  });
+
+  const openPhotosphere = async (panorama, trigger) => {
+    const request = ++photosphereRequest;
+    photosphereTrigger = trigger;
+    document.getElementById("photosphere-title").textContent = panorama.name;
+    document.getElementById("photosphere-coordinates").textContent = `X ${panorama.coordinates.x}, Z ${panorama.coordinates.z}`;
+    setStatus(photosphereStatus, "Loading 360° view.");
+    photosphereDialog.showModal();
+    try {
+      await loadPhotosphereLibrary();
+      if (!photosphereDialog.open || request !== photosphereRequest) return;
+      photosphereViewer = window.pannellum.viewer("photosphere-viewer", {
+        type: "cubemap", cubeMap: panorama.faces, autoLoad: true,
+        autoRotate: 0, compass: false, showFullscreenCtrl: false,
+        strings: { loadingLabel: "Loading photosphere…" }
+      });
+      [[".pnlm-zoom-in", "Zoom in"], [".pnlm-zoom-out", "Zoom out"]].forEach(([selector, label]) => {
+        const control = document.querySelector(`#photosphere-viewer ${selector}`);
+        control.setAttribute("role", "button");
+        control.setAttribute("aria-label", label);
+        control.tabIndex = 0;
+        control.onkeydown = (event) => {
+          if (event.key === "Enter" || event.key === " ") {
+            event.preventDefault();
+            control.click();
+          }
+        };
+      });
+      photosphereViewer.on("load", () => {
+        if (request === photosphereRequest) setStatus(photosphereStatus, "Drag or swipe to look around. Use + / − to zoom; focus the view to use arrow keys.");
+      });
+      photosphereViewer.on("error", () => {
+        if (request === photosphereRequest) setStatus(photosphereStatus, "This photosphere could not load. Close and try again.", true);
+      });
+    } catch (error) {
+      if (photosphereDialog.open && request === photosphereRequest) setStatus(photosphereStatus, error.message, true);
+    }
+  };
+
+  const photosphereEntries = (data) => {
+    if (!Array.isArray(data.panoramas)) throw new Error("The photospheres list is invalid.");
+    const base = new URL("panoramas/", document.baseURI);
+    const ids = new Set();
+    return data.panoramas.map((panorama) => {
+      if (!panorama || typeof panorama.id !== "string" || !panorama.id.trim() || ids.has(panorama.id)
+        || typeof panorama.name !== "string" || !panorama.name.trim()
+        || !Number.isFinite(panorama.coordinates?.x) || !Number.isFinite(panorama.coordinates?.z)
+        || !Array.isArray(panorama.faces) || panorama.faces.length !== 6) {
+        throw new Error("A photosphere has invalid details or coordinates.");
+      }
+      ids.add(panorama.id);
+      const faces = panorama.faces.map((face) => {
+        if (typeof face !== "string" || !face.trim() || face.startsWith("/")) throw new Error("A photosphere image path is invalid.");
+        const url = new URL(face, base);
+        if (url.origin !== base.origin || !url.pathname.startsWith(base.pathname)) throw new Error("Photosphere images must be inside the panoramas folder.");
+        return url.href;
+      });
+      return { ...panorama, faces };
+    });
+  };
+
   async function start() {
     let config;
     try {
@@ -240,6 +349,37 @@
     } catch (error) {
       settlementsToggle.disabled = true;
       setStatus(settlementsStatus, `Settlements could not load. ${error.message}`, true);
+    }
+
+    const photospheresStatus = document.getElementById("photospheres-status");
+    try {
+      const panoramas = photosphereEntries(await getJson("panoramas/panoramas.json"));
+      const icon = L.divIcon({
+        className: "photosphere-marker", iconSize: [44, 44], iconAnchor: [22, 22],
+        html: '<svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><path d="M3 6h4l2-3h6l2 3h4v15H3Z"/><circle cx="12" cy="13" r="4"/></svg>'
+      });
+      const layer = L.layerGroup(panoramas.map((panorama) => {
+        const marker = L.marker([panorama.coordinates.z, panorama.coordinates.x], {
+          icon, title: panorama.name, keyboard: true, autoPanOnFocus: false
+        }).bindTooltip(escapeHtml(panorama.name));
+        marker.on("add", () => {
+          const element = marker.getElement();
+          element.setAttribute("aria-label", panorama.name);
+          element.onkeydown = (event) => {
+            if (event.key === "Enter" || event.key === " ") {
+              event.preventDefault();
+              event.stopPropagation();
+              marker.fire("click");
+            }
+          };
+        });
+        return marker.on("click", () => openPhotosphere(panorama, marker.getElement()));
+      }));
+      setLayerToggle("photospheres-toggle", layer, map);
+      setStatus(photospheresStatus, panoramas.length ? `${panoramas.length} photosphere${panoramas.length === 1 ? "" : "s"} loaded. Select a camera to look around.` : "No photospheres have been added yet.");
+    } catch (error) {
+      document.getElementById("photospheres-toggle").disabled = true;
+      setStatus(photospheresStatus, `Photospheres could not load. ${error.message}`, true);
     }
 
     const nodes = L.layerGroup();

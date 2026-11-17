@@ -34,6 +34,14 @@ jobs:
           path: site/map-data
           persist-credentials: false
 
+      - name: Check out photospheres
+        uses: actions/checkout@v6
+        with:
+          repository: ColtSaboteur/civnodes-map-panoramas
+          ref: main
+          path: site/panoramas
+          persist-credentials: false
+
       - name: Check website size
         run: |
           test -s site/map-data/api/config.json

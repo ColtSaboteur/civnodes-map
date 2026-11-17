@@ -60,6 +60,29 @@ Edit `site/api/settlements.json` and commit it with the website. Settlements are
 
 `visitors` should be `welcome`, `not welcome`, or `ask first`. Discord links must use HTTPS.
 
+## Update photospheres
+
+The Photospheres layer reads `site/panoramas/panoramas.json` and its six-face PNG
+images from [`civnodes-map-panoramas`](https://github.com/ColtSaboteur/civnodes-map-panoramas).
+That repository's README describes how to register a new location. Publish its
+`main` branch before deploying the map. Deployment checks out the latest data,
+just like the map tiles, and includes it in the website size check.
+
+For local preview, clone it once from the website repository root:
+
+```sh
+git clone https://github.com/ColtSaboteur/civnodes-map-panoramas.git site/panoramas
+```
+
+If it is already cloned, update it with `git -C site/panoramas pull --ff-only`.
+For an existing sibling checkout, use `ln -s ../../civnodes-map-panoramas site/panoramas`
+instead of cloning. This folder is ignored by the website repository.
+
+The camera at X −557, Z 466 opens the Anguish government building interior.
+Drag or swipe to look around, use the zoom controls, or focus the view and use
+arrow keys. Close or Escape returns to the map. Pannellum 2.5.7 loads from its CDN
+when a photosphere is opened; a failed viewer or image load leaves the map usable.
+
 ## Check locally
 
 Run:
