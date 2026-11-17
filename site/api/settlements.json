@@ -7,6 +7,14 @@
       "contact": "zibekabir",
       "visitors": "welcome",
       "discord": ""
+    },
+    {
+      "name": "Solace",
+      "coordinates": { "x": -500, "z": 500 },
+      "nation": "Anguish",
+      "contact": "zibekabir",
+      "visitors": "welcome",
+      "discord": ""
     }
   ]
 }
