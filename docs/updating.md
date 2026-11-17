@@ -78,6 +78,7 @@ If it is already cloned, update it with `git -C site/panoramas pull --ff-only`.
 For an existing sibling checkout, use `ln -s ../../civnodes-map-panoramas site/panoramas`
 instead of cloning. This folder is ignored by the website repository.
 
+Photospheres are off by default. Enable **Show photospheres** to see the cameras.
 The camera at X −557, Z 466 opens the Anguish government building interior.
 Drag or swipe to look around, use the zoom controls, or focus the view and use
 arrow keys. Close or Escape returns to the map. Pannellum 2.5.7 loads from its CDN
