@@ -67,6 +67,7 @@ input[type="range"] { padding: 0; cursor: pointer; accent-color: var(--cyan); }
 .slider-row input { flex: 1; }
 .slider-row output { min-width: 32px; color: var(--text); font-size: 11px; text-align: right; }
 .file-status { margin: 6px 0 0; color: var(--text-dim); font-size: 11px; line-height: 1.45; }
+.file-status:empty { display: none; }
 .file-status.error { color: var(--danger); }
 .info-box { margin-top: 8px; padding: 8px 10px; border: 1px solid var(--border); border-radius: 6px; background: var(--bg); color: var(--text); font-size: 11px; line-height: 1.45; }
 .info-box[hidden] { display: none; }

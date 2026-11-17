@@ -333,9 +333,8 @@
     const claims = L.imageOverlay("images/claims.png", bounds, { opacity: .7 });
     const claimsOpacity = opacityControl("claims-opacity", "claims-opacity-value", (opacity) => claims.setOpacity(opacity));
     claimsOpacity.update();
-    setStatus(claimsStatus, "Claims overlay is off.");
     claims.on("load", () => {
-      setStatus(claimsStatus, "Claims image loaded.");
+      setStatus(claimsStatus, "");
     }).on("error", () => {
       claimsToggle.disabled = true;
       setStatus(claimsStatus, "Claims image could not load. Publish site/images/claims.png.", true);
@@ -352,7 +351,7 @@
         permanent: true, direction: "top", offset: [0, -4], className: "settlement-label"
       }).bindPopup(settlementPopup(settlement))));
       setLayerToggle("settlements-toggle", layer, map);
-      setStatus(settlementsStatus, `${settlements.length} settlement${settlements.length === 1 ? "" : "s"} loaded.`);
+      setStatus(settlementsStatus, "");
     } catch (error) {
       settlementsToggle.disabled = true;
       setStatus(settlementsStatus, `Settlements could not load. ${error.message}`, true);
@@ -383,7 +382,7 @@
         return marker.on("click", () => openPhotosphere(panorama, marker.getElement()));
       }));
       setLayerToggle("photospheres-toggle", layer, map);
-      setStatus(photospheresStatus, panoramas.length ? `${panoramas.length} photosphere${panoramas.length === 1 ? "" : "s"} loaded. Select a camera to look around.` : "No photospheres have been added yet.");
+      setStatus(photospheresStatus, panoramas.length ? "" : "No photospheres have been added yet.");
     } catch (error) {
       document.getElementById("photospheres-toggle").disabled = true;
       setStatus(photospheresStatus, `Photospheres could not load. ${error.message}`, true);
