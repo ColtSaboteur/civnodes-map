@@ -80,6 +80,8 @@ instead of cloning. This folder is ignored by the website repository.
 
 Photospheres are off by default. Enable **Show photospheres** to see the cameras.
 The camera at X −557, Z 466 opens the Anguish government building interior.
+The viewer displays the upload date stored as `uploadedAt` (`YYYY-MM-DD`) in the
+panoramas manifest. Older entries without a date show "Upload date unavailable".
 Drag or swipe to look around, use the zoom controls, or focus the view and use
 arrow keys. Close or Escape returns to the map. Pannellum 2.5.7 loads from its CDN
 when a photosphere is opened; a failed viewer or image load leaves the map usable.

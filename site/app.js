@@ -229,6 +229,7 @@
     photosphereTrigger = trigger;
     document.getElementById("photosphere-title").textContent = panorama.name;
     document.getElementById("photosphere-coordinates").textContent = `X ${panorama.coordinates.x}, Z ${panorama.coordinates.z}`;
+    document.getElementById("photosphere-upload-date").textContent = panorama.uploadedAt ? `Uploaded ${panorama.uploadedAt}` : "Upload date unavailable";
     setStatus(photosphereStatus, "Loading 360° view.");
     photosphereDialog.showModal();
     try {
@@ -274,6 +275,12 @@
         throw new Error("A photosphere has invalid details or coordinates.");
       }
       ids.add(panorama.id);
+      if (panorama.uploadedAt !== undefined && (typeof panorama.uploadedAt !== "string"
+        || !/^\d{4}-\d{2}-\d{2}$/.test(panorama.uploadedAt)
+        || !Number.isFinite(Date.parse(panorama.uploadedAt))
+        || new Date(panorama.uploadedAt).toISOString().slice(0, 10) !== panorama.uploadedAt)) {
+        throw new Error("A photosphere upload date must use YYYY-MM-DD.");
+      }
       const faces = panorama.faces.map((face) => {
         if (typeof face !== "string" || !face.trim() || face.startsWith("/")) throw new Error("A photosphere image path is invalid.");
         const url = new URL(face, base);
