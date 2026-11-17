@@ -356,7 +356,7 @@
       const panoramas = photosphereEntries(await getJson("panoramas/panoramas.json"));
       const icon = L.divIcon({
         className: "photosphere-marker", iconSize: [44, 44], iconAnchor: [22, 22],
-        html: '<svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><path d="M3 6h4l2-3h6l2 3h4v15H3Z"/><circle cx="12" cy="13" r="4"/></svg>'
+        html: '<svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M3 6h4l2-3h6l2 3h4v15H3Z"/><circle cx="12" cy="13" r="4"/></svg>'
       });
       const layer = L.layerGroup(panoramas.map((panorama) => {
         const marker = L.marker([panorama.coordinates.z, panorama.coordinates.x], {
