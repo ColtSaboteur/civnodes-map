@@ -15,6 +15,142 @@
       "contact": "zibekabir",
       "visitors": "welcome",
       "discord": ""
+    },
+    {
+      "name": "Belfruit",
+      "coordinates": { "x": -2410, "z": -1350 },
+      "nation": "Lemontine",
+      "contact": "Invader1337",
+      "visitors": "welcome",
+      "discord": ""
+    },
+    {
+      "name": "Spica",
+      "coordinates": { "x": 8950, "z": 4720 },
+      "nation": "Spica",
+      "contact": "PinkysAvenger",
+      "visitors": "ask first",
+      "discord": ""
+    },
+    {
+      "name": "Pella City",
+      "coordinates": { "x": -9930, "z": 230 },
+      "nation": "Kingdom of Pella",
+      "contact": "hedrone",
+      "visitors": "ask first",
+      "discord": ""
+    },
+    {
+      "name": "Icy Peaks",
+      "coordinates": { "x": 6175, "z": 655 },
+      "nation": "Icey Peaks Federation",
+      "contact": "Enderman9305",
+      "visitors": "ask first",
+      "discord": ""
+    },
+    {
+      "name": "Eldria",
+      "coordinates": { "x": 4090, "z": 235 },
+      "nation": "Icey Peaks Federation",
+      "contact": "Miameerkat_",
+      "visitors": "ask first",
+      "discord": ""
+    },
+    {
+      "name": "Dorem",
+      "coordinates": { "x": 7535, "z": 1085 },
+      "nation": "Icey Peaks Federation",
+      "contact": ".Zalvern4442",
+      "visitors": "ask first",
+      "discord": ""
+    },
+    {
+      "name": "Shanguo",
+      "coordinates": { "x": 5490, "z": 1800 },
+      "nation": "Shanguo",
+      "contact": "Wasabiwhip",
+      "visitors": "ask first",
+      "discord": ""
+    },
+    {
+      "name": "BlackRock City",
+      "coordinates": { "x": 9110, "z": 3075 },
+      "nation": "BlackRock",
+      "contact": "ChuckSchumer",
+      "visitors": "ask first",
+      "discord": ""
+    },
+    {
+      "name": "Averon",
+      "coordinates": { "x": 2180, "z": -1670 },
+      "nation": "Fortuna",
+      "contact": "KilianMaster1",
+      "visitors": "ask first",
+      "discord": ""
+    },
+    {
+      "name": "Lichtenval",
+      "coordinates": { "x": 6320, "z": -1495 },
+      "nation": "Lichtenval",
+      "contact": "PwayDoh",
+      "visitors": "ask first",
+      "discord": ""
+    },
+    {
+      "name": "New American State",
+      "coordinates": { "x": 4515, "z": -3520 },
+      "nation": "CastleTown",
+      "contact": ".Rrunin4Lifez",
+      "visitors": "ask first",
+      "discord": ""
+    },
+    {
+      "name": "Emmyron",
+      "coordinates": { "x": 5955, "z": 3175 },
+      "nation": "Emmyron",
+      "contact": "TrfcLuke123",
+      "visitors": "ask first",
+      "discord": ""
+    },
+    {
+      "name": "Imperial Federation",
+      "coordinates": { "x": -8200, "z": 3775 },
+      "nation": "Imperial Federation",
+      "contact": "JoelThaTroll",
+      "visitors": "ask first",
+      "discord": ""
+    },
+    {
+      "name": "Ura Ak'Chon",
+      "coordinates": { "x": 8810, "z": 9755 },
+      "nation": "Ura Ak'Chon",
+      "contact": "Pomnabo",
+      "visitors": "ask first",
+      "discord": ""
+    },
+    {
+      "name": "Kalloj",
+      "coordinates": { "x": -11045, "z": -8785 },
+      "nation": "NeoKallojia",
+      "contact": "counterbridge",
+      "visitors": "ask first",
+      "discord": ""
+    },
+    {
+      "name": "Havengate",
+      "coordinates": { "x": -3930, "z": -8480 },
+      "nation": "Havengate",
+      "contact": ".StokieBoy1538",
+      "visitors": "ask first",
+      "discord": ""
+    },
+    {
+      "name": "Hazil",
+      "coordinates": { "x": 8280, "z": -11745 },
+      "nation": "Hazil Empire",
+      "contact": "Luigsy",
+      "visitors": "ask first",
+      "discord": ""
     }
   ]
 }
